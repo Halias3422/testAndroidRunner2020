@@ -48,6 +48,11 @@ public class Player {
         return (y);
     }
 
+    public int getVelocity()
+    {
+        return (velocity);
+    }
+
     public int getJumpForce()
     {
         return (jumpForce);
@@ -70,41 +75,40 @@ public class Player {
             y = 0;
     }
 
-    public void jump() {
-        System.out.printf("y = %d velocity = %d jumpForce = %d\n", y, velocity, jumpForce);
-        if (jumpForce > 0)
-            addToJumpForce(-5);
-        setY(y + velocity);
-        velocity -= 2;
-        if (jumpForce <= 0 && velocity > 0)
-        {
-            velocity = 0;
-            jumpForce = 0;
-        }
-
-    }
-
     public void setX(int newX)
     {
         x = newX;
     }
 
-    public void addToJumpForce(int add)
+    public void increaseJumpForce(int add)
     {
-        jumpForce += add;
+        System.out.printf("JE passe la\n");
+        jumpForce -= add;
+        if (jumpForce < 2)
+            jumpForce = 2;
     }
 
     public void initJump()
     {
         jumping = 1;
-        velocity = 20;
+        velocity = 40;
         y += 1;
         x = 448;
+    }
+
+    public void jump() {
+        y += velocity;
+        velocity -= jumpForce;
+        if (velocity < 0)
+            jumpForce += 2;
+        if (y < 0)
+                y = 0;
     }
 
     public void endJump()
     {
         jumping = 0;
+        jumpForce = 20;
         y = 0;
         velocity = 0;
         x = 64;
