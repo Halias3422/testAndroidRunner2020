@@ -103,6 +103,6 @@ public class Player {
 
     public void print(SpriteBatch batch)
     {
-        batch.draw(img, Gdx.graphics.getWidth() / 5 - width, y, width * 2, height * 2, x, 0, width, height, false, false);
+        batch.draw(img, Gdx.graphics.getWidth() / 5 - width, y, width * 3, height * 3, x, 0, width, height, false, false);
     }
 }

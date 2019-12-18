@@ -26,7 +26,8 @@ public class TestAndroid extends ApplicationAdapter {
 
 		if (saved == 0)
 			saved = (int) System.currentTimeMillis();
-		if (Player.isJumping() == 0 && Gdx.input.isButtonJustPressed((Input.Buttons.LEFT)))
+		if (Player.isJumping() == 0 && (Gdx.input.isButtonJustPressed((Input.Buttons.LEFT))
+			|| Gdx.input.isTouched()))
 			Player.initJump();
 		else if (Player.isJumping() == 1 && Player.getVelocity() == -30)
 			Player.endJump();
