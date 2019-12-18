@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Player {
+
     private Texture img;
     private int x;
     private int y;
+    private int jumpForce;
     private int velocity;
 
     private int jumping;
@@ -21,6 +23,7 @@ public class Player {
         jumping = 0;
         y = 0;
         velocity = 0;
+        jumpForce = 20;
         width = 32;
         height = 55;
     }
@@ -45,9 +48,9 @@ public class Player {
         return (y);
     }
 
-    public int getVelocity()
+    public int getJumpForce()
     {
-        return (velocity);
+        return (jumpForce);
     }
 
     public Texture getImg()
@@ -67,27 +70,40 @@ public class Player {
             y = 0;
     }
 
+    public void jump() {
+        System.out.printf("y = %d velocity = %d jumpForce = %d\n", y, velocity, jumpForce);
+        if (jumpForce > 0)
+            addToJumpForce(-5);
+        setY(y + velocity);
+        velocity -= 2;
+        if (jumpForce <= 0 && velocity > 0)
+        {
+            velocity = 0;
+            jumpForce = 0;
+        }
+
+    }
+
     public void setX(int newX)
     {
         x = newX;
     }
 
-    public void addToVelocity(int add)
+    public void addToJumpForce(int add)
     {
-        velocity += add;
+        jumpForce += add;
     }
 
     public void initJump()
     {
-        System.out.print("JUMP INIT\n");
         jumping = 1;
-        velocity = 30;
+        velocity = 20;
+        y += 1;
         x = 448;
     }
 
     public void endJump()
     {
-        System.out.print("JUMP ENDING\n");
         jumping = 0;
         y = 0;
         velocity = 0;
@@ -103,6 +119,6 @@ public class Player {
 
     public void print(SpriteBatch batch)
     {
-        batch.draw(img, Gdx.graphics.getWidth() / 5 - width, y, width * 3, height * 3, x, 0, width, height, false, false);
+        batch.draw(img, Gdx.graphics.getWidth() / 5 - width, y, width * 5, height * 5, x, 0, width, height, false, false);
     }
 }
