@@ -94,6 +94,11 @@ public class Player
         return (img);
     }
 
+    public int  getLife()
+    {
+        return (life);
+    }
+
     public int isJumping()
     {
         return (jumping);
@@ -224,9 +229,7 @@ public class Player
             if (PLAYER_Y < OBJ_END_Y || PLAYER_END_Y < OBJ_Y) //if control pb vertical
             {
                 if (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X) //if control droite joueur
-                {
                     screenX = OBJ_X - PLAYER_WIDTH;
-                }
             }
         }
     }
@@ -256,21 +259,10 @@ public class Player
             if ((PLAYER_X < OBJ_X && PLAYER_END_X > OBJ_X) || (PLAYER_X < OBJ_END_X && PLAYER_X > OBJ_X) ||
                     (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X)) //if control pb vertical
             {
-                if (PLAYER_Y <= OBJ_Y && PLAYER_Y >= OBJ_END_Y) //if control gauche joueur
-                {
-                    y = OBJ_END_Y;
-                    check++;
+                if (PLAYER_Y < OBJ_END_Y) {
+                    life = 0;
                 }
-                if (PLAYER_END_Y <= OBJ_Y && PLAYER_END_Y >= OBJ_END_Y) //if control droite joueur
-                {
-                    check++;
-                    PLAYER_Y = OBJ_Y - PLAYER_HEIGHT;
-                    life -= 1;
-                    if (life > 0)
-                        ;//reborn(platform, obj_list);
-                }
-                jumping = 0;
-                vspeed = 0;
+
             }
         }
     }
@@ -278,6 +270,6 @@ public class Player
     public void check_collision(LinkedList<Obstacles> listObstacles)
     {
         check_collision_horizontal(listObstacles);
- //       check_collision_vertical((listObstacles));
+        check_collision_vertical((listObstacles));
     }
 }

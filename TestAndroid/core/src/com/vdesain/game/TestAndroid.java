@@ -45,7 +45,6 @@ public class TestAndroid extends ApplicationAdapter {
 	{
 		if (listObstacles.getFirst().getEndX() < 0)
 		{
-		    System.out.printf("Je Passe la\n");
 			listObstacles.removeFirst();
 			listObstacles.addLast(new Obstacles(listObstacles.getLast(), Player));
 		}
@@ -86,6 +85,8 @@ public class TestAndroid extends ApplicationAdapter {
 
 		listObstacles = updatePlatforms(listObstacles);
 		playerMovement(listObstacles);
+		if (Player.getLife() <= 0)
+			dispose();
 		it = listObstacles.listIterator();
 		current =  System.currentTimeMillis();
 		batch.begin();

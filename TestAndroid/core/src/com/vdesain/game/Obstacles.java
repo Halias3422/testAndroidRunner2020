@@ -31,7 +31,6 @@ public class Obstacles
                         x = Prev.getX() + 500;
                         height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 110) + 110;
                         y = height - 416;
-                        System.out.printf("x = %d height = %d y = %d\n", x, height, y);
                 }
                 endX = x + width;
         }
@@ -48,7 +47,7 @@ public class Obstacles
 
         public int getEndY()
         {
-                return (y + height);
+                return (y + 416);
         }
 
         public int getEndX()
