@@ -49,29 +49,9 @@ public class Player
         life = 1;
     }
 
-    public int getWidth()
-    {
-        return (width);
-    }
-
     public int getRealWidth()
     {
         return (realWidth);
-    }
-
-    public int getRealHeight()
-    {
-        return (realHeight);
-    }
-
-    public int getHeight()
-    {
-        return (height);
-    }
-
-    public int getX()
-    {
-        return (x);
     }
 
     public int getScreenX()
@@ -82,11 +62,6 @@ public class Player
     public int getY()
     {
         return (y);
-    }
-
-    public double getVspeed()
-    {
-        return (vspeed);
     }
 
     public Texture getImg()
@@ -102,18 +77,6 @@ public class Player
     public int isJumping()
     {
         return (jumping);
-    }
-
-    public void setY(int newY)
-    {
-        y = newY;
-        if (y < 100)
-            y = 100;
-    }
-
-    public void setX(int newX)
-    {
-        x = newX;
     }
 
     public void initJump(SpriteBatch batch)
@@ -184,12 +147,8 @@ public class Player
 
     public void print(SpriteBatch batch)
     {
-        batch.draw(img, screenX, y, realWidth, realHeight, x, 0, width, height, false, false);
-    }
-
-    public double getMaxJumpHeight()
-    {
-        return maxJumpHeight;
+        batch.draw(img, screenX, y, realWidth, realHeight, x, 0, width, height,
+                false, false);
     }
 
  /*
@@ -209,12 +168,9 @@ public class Player
     {
         ListIterator<Obstacles> it = listObstacles.listIterator();
         int PLAYER_Y = y;
-        int PLAYER_X = screenX;
         int PLAYER_WIDTH = realWidth;
-        //   int PLAYER_HEIGHT = realHeight;
         int PLAYER_END_X = screenX + realWidth;
         int PLAYER_END_Y = y + realHeight;
-        //horizontal
 
         while (it.hasNext())
         {
@@ -223,12 +179,10 @@ public class Player
             int OBJ_Y = Current.getY();
             int OBJ_END_Y = Current.getEndY();
             int OBJ_END_X = Current.getEndX();
-            //    int OBJ_WIDTH = Current.getWidth();
-            //    int OBJ_HEIGHT = Current.getHeigh();
 
-            if (PLAYER_Y < OBJ_END_Y || PLAYER_END_Y < OBJ_Y) //if control pb vertical
+            if (PLAYER_Y < OBJ_END_Y || PLAYER_END_Y < OBJ_Y)
             {
-                if (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X) //if control droite joueur
+                if (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X)
                     screenX = OBJ_X - PLAYER_WIDTH;
             }
         }
@@ -237,32 +191,24 @@ public class Player
 
     public void check_collision_vertical(LinkedList<Obstacles> listObstacles)
     {
-        int check = 0;
         ListIterator<Obstacles> it = listObstacles.listIterator();
         int PLAYER_Y = y;
         int PLAYER_X = screenX;
-        //    int PLAYER_WIDTH = realWidth;
-        int PLAYER_HEIGHT = realHeight;
         int PLAYER_END_X = screenX + realWidth;
-        int PLAYER_END_Y = y + realHeight;
 
         while (it.hasNext())
         {
             Obstacles Current = it.next();
             int OBJ_X = Current.getX();
-            int OBJ_Y = Current.getY();
             int OBJ_END_Y = Current.getEndY();
             int OBJ_END_X = Current.getEndX();
-            //       int OBJ_WIDTH = Current.getWidth();
-            //       int OBJ_HEIGHT = Current.getHeigh();
 
             if ((PLAYER_X < OBJ_X && PLAYER_END_X > OBJ_X) || (PLAYER_X < OBJ_END_X && PLAYER_X > OBJ_X) ||
-                    (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X)) //if control pb vertical
+                    (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X))
             {
                 if (PLAYER_Y < OBJ_END_Y) {
                     life = 0;
                 }
-
             }
         }
     }
@@ -271,5 +217,7 @@ public class Player
     {
         check_collision_horizontal(listObstacles);
         check_collision_vertical((listObstacles));
+        if (screenX + realWidth < 0)
+            life = 0;
     }
 }

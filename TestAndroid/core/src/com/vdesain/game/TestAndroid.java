@@ -12,24 +12,30 @@ import java.util.ListIterator;
 public class TestAndroid extends ApplicationAdapter {
 	SpriteBatch batch;
 	Player 		Player;
-	Background  Background;
+	Background	Mountains;
+	Background	Forest;
+	Background	Ground;
 	LinkedList<Obstacles> 	listObstacles;
 	ListIterator<Obstacles> it;
 	Texture		obst1;
 	long		saved;
 	long		current;
 	int  		stillTouched;
+	private int	score;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		Player = new Player();
-		Background = new Background();
+		Mountains = new Background("mountains");
+		Forest = new Background("forest");
+		Ground = new Background("ground");
 		listObstacles = new LinkedList<Obstacles>();
 		initObstacles();
 		saved = System.currentTimeMillis();
 		current = 0;
 		stillTouched = 0;
+		score = 0;
 	}
 
 	public void initObstacles()
@@ -86,30 +92,37 @@ public class TestAndroid extends ApplicationAdapter {
 		listObstacles = updatePlatforms(listObstacles);
 		playerMovement(listObstacles);
 		if (Player.getLife() <= 0)
+		{
 			dispose();
+			create();
+		}
 		it = listObstacles.listIterator();
 		current =  System.currentTimeMillis();
 		batch.begin();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
-		Background.print(batch);
+		Mountains.print(batch);
+		Forest.print(batch);
 		while (it.hasNext())
 		{
 			Obstacles Current = it.next();
+			if (Current.getCrossed() == 0)
+				score += Current.checkIfCrossed(Player);
 			Current.print(batch, obst1);
 		}
+		Ground.print(batch);
 		Player.print(batch);
 		batch.end();
+		System.out.println("SCORE = " + score);
 
 	}
 	
 	@Override
 	public void dispose () {
-
 		batch.dispose();
-		Background.getForest().dispose();
-		Background.getMountains().dispose();
-		Background.getGround().dispose();
+		Mountains.getText().dispose();
+		Forest.getText().dispose();
+		Ground.getText().dispose();
 		obst1.dispose();
 		Player.getImg().dispose();
 	}

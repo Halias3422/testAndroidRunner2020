@@ -15,6 +15,7 @@ public class Obstacles
         private int     endY;
         private int     height;
         private int     y;
+        private int     crossed;
 
         public Obstacles(Obstacles Prev, Player Player)
         {
@@ -33,6 +34,7 @@ public class Obstacles
                         y = height - 416;
                 }
                 endX = x + width;
+                crossed = 0;
         }
 
         public int getX()
@@ -65,10 +67,25 @@ public class Obstacles
                 return (height);
         }
 
+        public int getCrossed()
+        {
+                return (crossed);
+        }
+
         public void print(SpriteBatch batch, Texture img)
         {
                 batch.draw(img, x, y);
                 x -= 10;
+        }
+
+        public int checkIfCrossed(Player Player)
+        {
+                if (Player.getScreenX() > x + width && Player.getLife() > 0)
+                {
+                        crossed = 1;
+                        return (1);
+                }
+                return (0);
         }
 
         public int setX()

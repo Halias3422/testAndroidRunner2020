@@ -4,59 +4,72 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Background {
-    private Texture mountains;
-    private Texture forest;
-    private Texture ground;
-    private int     backgroundOffset;
-    private int     middlegroundOffset;
-    private long    backgroundSaved;
-    private long    current;
-    private int     width;
-    private int     height;
+public class Background
+{
+    private Texture text;
+    private String  name;
+    private long    lastMoved;
+    private long    currentTime;
+    private int     screenWidth;
+    private int     screenHeight;
+    private int     textWidth;
+    private int     textHeight;
+    private int     srcX;
+    private int     srcY;
+    private int     tmpWidth;
 
-    public Background()
+    public Background(String textName)
     {
-        mountains = new Texture("mountains.png");
-        forest = new Texture("forest.png");
-        ground = new Texture("ground.png");
-        backgroundSaved = 0;
-        current = 1000;
-        width = Gdx.graphics.getWidth();
-        height = Gdx.graphics.getHeight();
-        backgroundOffset = 0;
-        middlegroundOffset = 0;
+        name = textName;
+        text = new Texture (name + ".png");
+        lastMoved = 0;
+        currentTime = 0;
+        screenWidth= Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
+        textWidth = text.getWidth();
+        textHeight = text.getHeight();
+        srcX = 0;
+        srcY = 0;
+    }
+
+    private void moveTextSrcX()
+    {
+        if (name == "mountains")
+        {
+            if (currentTime - 32 > lastMoved)
+            {
+                srcX += 1;
+                lastMoved = currentTime;
+            }
+        }
+        else if (name == "forest")
+            srcX += 2;
     }
 
     public void print(SpriteBatch batch)
     {
-        current = System.currentTimeMillis();
-        middlegroundOffset += 3;
-        if (current - 32 > backgroundSaved)
+        currentTime = System.currentTimeMillis();
+        if (srcX + screenWidth > textWidth)
         {
-            backgroundOffset += 1;
-            backgroundSaved = current;
+            tmpWidth = (textWidth - (srcX + screenWidth)) * -1;
+            batch.draw(text, 0, 0, screenWidth - tmpWidth, screenHeight,
+                    srcX, srcY, screenWidth - tmpWidth, textHeight, false, false);
+            batch.draw(text, screenWidth - tmpWidth, 0, tmpWidth, screenHeight,
+                    0, srcY, tmpWidth, textHeight, false, false);
         }
-        batch.draw(mountains, 0, 0, width, height, backgroundOffset,
-                0, width, height, false, false);
-        batch.draw(forest, 0, 0, width * 3, 480 * 3, middlegroundOffset,
-                0, width, 480, false, false);
-        batch.draw(ground, 0, 0, width * 3, 480 * 3, middlegroundOffset,
-                0, width, 480, false, false);
+        else
+        {
+            batch.draw(text, 0, 0, screenWidth, screenHeight,
+                    srcX, srcY, screenWidth, textHeight, false, false);
+        }
+        moveTextSrcX();
+        if (srcX >= textWidth)
+            srcX = 0;
     }
 
-    public Texture getForest()
+    public Texture getText()
     {
-        return forest;
-    }
-
-    public Texture getMountains()
-    {
-        return mountains;
-    }
-
-    public Texture getGround()
-    {
-        return ground;
+        return (text);
     }
 }
+
