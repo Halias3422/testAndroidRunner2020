@@ -24,13 +24,13 @@ public class Obstacles
                 if (Prev == null)
                 {
                        x = Random.nextInt(screenWidth * 2 + 1 - screenWidth) + screenWidth;
-                       height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 150) + 150;
+                       height = Random.nextInt(Player.getRealWidth() * 3 + 101 - 150) + 150;
                        y = height - 416;
                 }
                 else
                 {
                         x = Prev.getX() + (Random.nextInt(900 - 400) + 400);
-                        height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 150) + 150;
+                        height = Random.nextInt(Player.getRealWidth() * 3 + 101 - 150) + 150;
                         y = height - 416;
                 }
                 endX = x + width;

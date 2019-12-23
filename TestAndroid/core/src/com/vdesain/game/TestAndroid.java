@@ -104,7 +104,7 @@ public class TestAndroid extends ApplicationAdapter {
 			if (obstacleOffsetMax > 400)
 			obstacleOffsetMax -= 50;
 			obstaclesSpeed += 1;
-			levelCap *= 2;
+			levelCap += 10;
 		}
 
 	}
