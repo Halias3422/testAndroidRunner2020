@@ -206,7 +206,7 @@ public class Player
             if ((PLAYER_X < OBJ_X && PLAYER_END_X > OBJ_X) || (PLAYER_X < OBJ_END_X && PLAYER_X > OBJ_X) ||
                     (PLAYER_END_X > OBJ_X && PLAYER_END_X < OBJ_END_X))
             {
-                if (PLAYER_Y < OBJ_END_Y) {
+                if (PLAYER_Y < OBJ_END_Y - 60) {
                     life = 0;
                 }
             }

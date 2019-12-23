@@ -17,20 +17,20 @@ public class Obstacles
         private int     y;
         private int     crossed;
 
-        public Obstacles(Obstacles Prev, Player Player)
+        public Obstacles(Obstacles Prev, Player Player, int offsetMax)
         {
                 screenWidth = Gdx.graphics.getWidth();
                 Random = new Random();
                 if (Prev == null)
                 {
                        x = Random.nextInt(screenWidth * 2 + 1 - screenWidth) + screenWidth;
-                       height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 110) + 110;
+                       height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 150) + 150;
                        y = height - 416;
                 }
                 else
                 {
-                        x = Prev.getX() + 500;
-                        height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 110) + 110;
+                        x = Prev.getX() + (Random.nextInt(900 - 400) + 400);
+                        height = Random.nextInt(Player.getRealWidth() * 2 + 101 - 150) + 150;
                         y = height - 416;
                 }
                 endX = x + width;
@@ -72,10 +72,10 @@ public class Obstacles
                 return (crossed);
         }
 
-        public void print(SpriteBatch batch, Texture img)
+        public void print(SpriteBatch batch, Texture img, int speed)
         {
                 batch.draw(img, x, y);
-                x -= 10;
+                x -= speed;
         }
 
         public int checkIfCrossed(Player Player)

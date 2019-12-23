@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -12,39 +13,47 @@ import java.util.ListIterator;
 public class TestAndroid extends ApplicationAdapter {
 	SpriteBatch batch;
 	Player 		Player;
-	Background	Mountains;
-	Background	Forest;
-	Background	Ground;
+	Mountains	Mountains;
+	Forest		Forest;
+	Ground		Ground;
 	LinkedList<Obstacles> 	listObstacles;
 	ListIterator<Obstacles> it;
 	Texture		obst1;
 	long		saved;
 	long		current;
 	int  		stillTouched;
+	int			obstaclesSpeed;
+	int			obstacleOffsetMax;
 	private int	score;
+	private int levelCap;
+	private BitmapFont font;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		Player = new Player();
-		Mountains = new Background("mountains");
-		Forest = new Background("forest");
-		Ground = new Background("ground");
+		Mountains = new Mountains("mountains");
+		Forest = new Forest("forest");
+		Ground = new Ground("ground");
+		font = new BitmapFont();
 		listObstacles = new LinkedList<Obstacles>();
 		initObstacles();
 		saved = System.currentTimeMillis();
 		current = 0;
 		stillTouched = 0;
 		score = 0;
+		levelCap = 10;
+		obstaclesSpeed = 10;
+		obstacleOffsetMax = 900;
 	}
 
 	public void initObstacles()
 	{
 		obst1 = new Texture("ground2.png");
 
-		listObstacles.add(new Obstacles(null, Player));
+		listObstacles.add(new Obstacles(null, Player, obstacleOffsetMax));
 		for (int i = 1; i < 10; i++)
-			listObstacles.addLast(new Obstacles(listObstacles.getLast(), Player));
+			listObstacles.addLast(new Obstacles(listObstacles.getLast(), Player, obstacleOffsetMax));
 	}
 
 	public LinkedList updatePlatforms(LinkedList<Obstacles> listObstacles)
@@ -52,7 +61,7 @@ public class TestAndroid extends ApplicationAdapter {
 		if (listObstacles.getFirst().getEndX() < 0)
 		{
 			listObstacles.removeFirst();
-			listObstacles.addLast(new Obstacles(listObstacles.getLast(), Player));
+			listObstacles.addLast(new Obstacles(listObstacles.getLast(), Player, obstacleOffsetMax));
 		}
 		return (listObstacles);
 	}
@@ -86,6 +95,20 @@ public class TestAndroid extends ApplicationAdapter {
 		Player.check_collision(listObstacles);
 	}
 
+	public void checkIfLevelPassed()
+	{
+		if (score > levelCap)
+		{
+			Mountains.increaseSpeed();
+			Forest.increaseSpeed();
+			if (obstacleOffsetMax > 400)
+			obstacleOffsetMax -= 50;
+			obstaclesSpeed += 1;
+			levelCap *= 2;
+		}
+
+	}
+
 	@Override
 	public void render () {
 
@@ -108,13 +131,14 @@ public class TestAndroid extends ApplicationAdapter {
 			Obstacles Current = it.next();
 			if (Current.getCrossed() == 0)
 				score += Current.checkIfCrossed(Player);
-			Current.print(batch, obst1);
+			Current.print(batch, obst1, obstaclesSpeed);
 		}
 		Ground.print(batch);
 		Player.print(batch);
+		font.getData().setScale(4, 4);
+		font.draw(batch, "SCORE : " + score, 10, Gdx.graphics.getHeight() - 100);
 		batch.end();
-		System.out.println("SCORE = " + score);
-
+		checkIfLevelPassed();
 	}
 	
 	@Override
@@ -123,6 +147,7 @@ public class TestAndroid extends ApplicationAdapter {
 		Mountains.getText().dispose();
 		Forest.getText().dispose();
 		Ground.getText().dispose();
+		font.dispose();
 		obst1.dispose();
 		Player.getImg().dispose();
 	}
